@@ -77,8 +77,4 @@ The frontend is served statically by the backend server. Once the backend is run
     └── *.html          # UI Pages
 ```
 
-## 📜 License
-This project is licensed under the MIT License.
-
----
-*Developed with ❤️ to make insurance simpler.*
+Enjoy the project.

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live Chat Support — On The Spot. Real-time WebSocket chat with insurance agents." />
+  <title>Live Chat — On The Spot</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand"><div class="nav-logo-icon">🚨</div><span>On The Spot</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="report.html" class="nav-link">Report</a></li>
+      <li><a href="claim.html" class="nav-link">Claims</a></li>
+      <li><a href="dispute.html" class="nav-link">Disputes</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="chat.html" class="nav-link active" aria-current="page">Live Chat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="btnLogin">Login</a>
+      <a href="report.html" class="btn btn-primary btn-sm">Report Now</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <main class="chat-main" style="padding-top:var(--nav-height)">
+    <div class="chat-layout">
+
+      <!-- ── Chat Rooms Sidebar ── -->
+      <aside class="chat-sidebar" aria-labelledby="chatRoomsHeading">
+        <div class="chat-sidebar-header">
+          <h2 id="chatRoomsHeading" class="chat-sidebar-title">Support Rooms</h2>
+          <div class="chat-online-indicator">
+            <span class="live-dot"></span>
+            <span id="chatOnlineCount">—</span> online
+          </div>
+        </div>
+
+        <div class="chat-search-wrap">
+          <input type="search" class="form-control" id="roomSearch" placeholder="Search rooms..." aria-label="Search chat rooms" />
+        </div>
+
+        <div class="rooms-list" id="roomsList" role="list" aria-label="Available chat rooms">
+          <div class="room-item active" data-room="general" role="listitem" tabindex="0" id="room-general">
+            <div class="room-icon" aria-hidden="true">💬</div>
+            <div class="room-info">
+              <p class="room-name">General Support</p>
+              <p class="room-preview">Ask any question...</p>
+            </div>
+            <span class="room-badge" id="badge-general"></span>
+          </div>
+          <div class="room-item" data-room="claims" role="listitem" tabindex="0" id="room-claims">
+            <div class="room-icon" aria-hidden="true">📋</div>
+            <div class="room-info">
+              <p class="room-name">Claims Assistance</p>
+              <p class="room-preview">Claim-related queries</p>
+            </div>
+            <span class="room-badge" id="badge-claims"></span>
+          </div>
+          <div class="room-item" data-room="disputes" role="listitem" tabindex="0" id="room-disputes">
+            <div class="room-icon" aria-hidden="true">⚖️</div>
+            <div class="room-info">
+              <p class="room-name">Dispute Mediation</p>
+              <p class="room-preview">Dispute guidance</p>
+            </div>
+            <span class="room-badge" id="badge-disputes"></span>
+          </div>
+          <div class="room-item" data-room="emergency" role="listitem" tabindex="0" id="room-emergency">
+            <div class="room-icon" aria-hidden="true">🚨</div>
+            <div class="room-info">
+              <p class="room-name">Emergency Report</p>
+              <p class="room-preview">Urgent accident help</p>
+            </div>
+            <span class="room-badge badge-danger" id="badge-emergency"></span>
+          </div>
+        </div>
+
+        <!-- Connected users -->
+        <div class="chat-participants" aria-labelledby="participantsHeading">
+          <h3 id="participantsHeading" class="participants-title">In This Room</h3>
+          <div id="participantsList" class="participants-list" role="list" aria-label="Active participants">
+            <!-- Populated by socket events -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── Chat Area ── -->
+      <div class="chat-area" aria-label="Chat area">
+        <div class="chat-header" id="chatHeader">
+          <div class="chat-header-info">
+            <div class="chat-header-icon" aria-hidden="true" id="chatHeaderIcon">💬</div>
+            <div>
+              <h2 class="chat-title" id="chatTitle">General Support</h2>
+              <p class="chat-subtitle" id="chatSubTitle">
+                <span class="live-dot"></span> Connected
+              </p>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <button class="btn btn-ghost btn-sm" id="clearChatBtn" aria-label="Clear chat">🗑️ Clear</button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Chat messages" aria-atomic="false">
+          <div class="chat-welcome">
+            <div class="chat-welcome-icon" aria-hidden="true">💬</div>
+            <h3>Welcome to General Support</h3>
+            <p>Messages are real-time. Ask anything about accident reporting, claims, or disputes.</p>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typingIndicator" aria-live="polite" aria-label="Typing indicator">
+          <span class="typing-dots"><span></span><span></span><span></span></span>
+          <span id="typingText"></span>
+        </div>
+
+        <!-- Message Input -->
+        <div class="chat-input-area">
+          <div class="chat-input-wrap" id="chatInputWrap">
+            <div class="chat-name-row" id="guestNameRow">
+              <input type="text" class="form-control" id="guestName" placeholder="Your name (optional)" maxlength="40" style="max-width:200px" aria-label="Your display name" />
+            </div>
+            <div class="chat-input-row">
+              <textarea class="form-control chat-textarea" id="chatInput" rows="1"
+                placeholder="Type your message..." maxlength="1000"
+                aria-label="Chat message input" aria-describedby="chatInputHint"></textarea>
+              <button class="btn btn-primary chat-send-btn" id="chatSendBtn" aria-label="Send message" disabled>
+                <span>↑</span>
+              </button>
+            </div>
+            <p class="form-hint" id="chatInputHint">Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

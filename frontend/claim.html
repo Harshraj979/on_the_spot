@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="File an insurance claim on On The Spot. Submit and track claims with real-time status updates." />
+  <title>File a Claim — On The Spot</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/claim.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand"><div class="nav-logo-icon">🚨</div><span>On The Spot</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="report.html" class="nav-link">Report</a></li>
+      <li><a href="claim.html" class="nav-link active" aria-current="page">Claims</a></li>
+      <li><a href="dispute.html" class="nav-link">Disputes</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="chat.html" class="nav-link">Live Chat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="btnLogin">Login</a>
+      <a href="report.html" class="btn btn-primary btn-sm">Report Now</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <div class="section-tag"><span>📋</span> Insurance Claims</div>
+      <h1 class="section-heading">File a <span class="gradient-text">Claim</span></h1>
+      <p class="section-sub">Submit your insurance claim with supporting documents and track its progress in real time.</p>
+    </div>
+  </header>
+
+  <main class="claim-main">
+    <div class="container">
+      <div class="claim-layout">
+
+        <!-- ── Claim Form ── -->
+        <section class="claim-form-section" aria-labelledby="claimFormHeading">
+          <div class="card">
+            <h2 id="claimFormHeading" class="card-section-title">New Claim</h2>
+            <form id="claimForm" novalidate enctype="multipart/form-data" aria-label="Insurance claim form">
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="claimType">Claim Type <span class="required">*</span></label>
+                  <select class="form-control" id="claimType" name="claimType" required>
+                    <option value="" disabled selected>Select claim type...</option>
+                    <option value="own-damage">Own Damage</option>
+                    <option value="third-party">Third-Party Liability</option>
+                    <option value="theft">Vehicle Theft</option>
+                    <option value="natural-calamity">Natural Calamity</option>
+                    <option value="fire">Fire Damage</option>
+                    <option value="personal-accident">Personal Accident</option>
+                  </select>
+                  <p class="form-error" id="claimTypeError"></p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="policyNumber">Policy Number <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="policyNumber" name="policyNumber"
+                    placeholder="e.g. POL-XXXXXXXX" required style="text-transform:uppercase" />
+                  <p class="form-error" id="policyNumberError"></p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="insuranceCompany">Insurance Company <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="insuranceCompany" name="insuranceCompany"
+                    placeholder="e.g. HDFC ERGO, Bajaj Allianz..." required />
+                  <p class="form-error" id="insuranceCompanyError"></p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="estimatedAmount">Estimated Claim Amount (₹) <span class="required">*</span></label>
+                  <div class="input-prefix-wrap">
+                    <span class="input-prefix">₹</span>
+                    <input type="number" class="form-control input-with-prefix" id="estimatedAmount"
+                      name="estimatedAmount" min="0" step="0.01" placeholder="0.00" required />
+                  </div>
+                  <p class="form-error" id="estimatedAmountError"></p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="accidentRef">Accident Case Number (Optional)</label>
+                  <input type="text" class="form-control" id="accidentRef" name="accidentRef"
+                    placeholder="e.g. OTS-XXXXX-XXXX" style="text-transform:uppercase" />
+                  <p class="form-hint">Link to an existing accident report.</p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="claimIncidentDate">Incident Date</label>
+                  <input type="date" class="form-control" id="claimIncidentDate" name="incidentDate" />
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top:var(--space-5)">
+                <label class="form-label" for="claimDescription">Claim Description <span class="required">*</span></label>
+                <textarea class="form-control" id="claimDescription" name="description" rows="5"
+                  placeholder="Describe the incident and damage in detail. Include how the accident occurred, the extent of damage, and what repairs or compensation you are seeking..."
+                  required minlength="20"></textarea>
+                <p class="form-error" id="claimDescError"></p>
+              </div>
+
+              <!-- Document Upload -->
+              <div class="form-group" style="margin-top:var(--space-6)">
+                <label class="form-label">Supporting Documents</label>
+                <div class="file-drop-zone" id="claimDropZone" role="button" tabindex="0" aria-label="Upload documents">
+                  <input type="file" id="claimDocs" name="documents" multiple
+                    accept="image/jpeg,image/png,image/webp,application/pdf" />
+                  <div class="drop-zone-icon">📎</div>
+                  <p class="drop-zone-title">Drop documents or <span class="drop-zone-link">browse</span></p>
+                  <p class="form-hint">Policy document, FIR copy, repair estimates, photos — JPG, PNG, PDF — Max 10MB each</p>
+                </div>
+                <div class="file-previews" id="claimFilePreviews" role="list"></div>
+              </div>
+
+              <button type="submit" class="btn btn-accent btn-lg" id="claimSubmitBtn" style="margin-top:var(--space-8);width:100%">
+                📤 Submit Claim
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ── My Claims Sidebar ── -->
+        <aside class="claims-sidebar" aria-labelledby="myClaimsHeading">
+          <div class="card">
+            <h2 id="myClaimsHeading" class="card-section-title">My Claims</h2>
+            <div class="claims-filter">
+              <select class="form-control form-control-sm" id="claimStatusFilter" aria-label="Filter claims by status">
+                <option value="">All Status</option>
+                <option value="submitted">Submitted</option>
+                <option value="under-review">Under Review</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div id="claimsList" class="claims-list" aria-live="polite" aria-label="Claims list">
+              <div class="claims-loading">
+                <div class="spinner"></div>
+                <p>Loading claims...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Claim Tips Card -->
+          <div class="card tips-card">
+            <h3 class="tips-title">💡 Tips for Faster Claims</h3>
+            <ul class="tips-list" role="list">
+              <li>📸 Attach clear photos of all damages</li>
+              <li>📄 Include a copy of your FIR for major accidents</li>
+              <li>🔢 Provide accurate policy number</li>
+              <li>✍️ Describe the incident in detail</li>
+              <li>📋 Attach repair estimates from authorized centers</li>
+            </ul>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Claim Detail Modal -->
+  <div class="modal-overlay" id="claimModal" role="dialog" aria-modal="true" aria-labelledby="claimModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="claimModalTitle">Claim Details</h3>
+        <button class="btn btn-ghost btn-sm" id="closeClaimModal" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="claimModalBody"><!-- populated dynamically --></div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom">
+    <span>© <span id="footerYear">2024</span> On The Spot. All rights reserved.</span>
+    <span>Need help? <a href="chat.html">Live Chat</a></span>
+  </div></div></footer>
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+  <script src="js/claim.js"></script>
+</body>
+</html>

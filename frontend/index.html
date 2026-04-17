@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="On The Spot — Real-time accident information and insurance dispute resolution platform. Report accidents, file claims, and resolve disputes instantly." />
+  <meta name="keywords" content="accident report, insurance claim, dispute resolution, real-time, on the spot" />
+  <meta property="og:title" content="On The Spot — Real-Time Accident & Insurance Platform" />
+  <meta property="og:description" content="Report accidents, file claims, and resolve insurance disputes in real time." />
+  <title>On The Spot — Real-Time Accident & Insurance Platform</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-brand" aria-label="On The Spot Home">
+      <div class="nav-logo-icon" aria-hidden="true">🚨</div>
+      <span>On The Spot</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks" role="list">
+      <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
+      <li><a href="report.html" class="nav-link">Report</a></li>
+      <li><a href="claim.html" class="nav-link">Claims</a></li>
+      <li><a href="dispute.html" class="nav-link">Disputes</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="chat.html" class="nav-link">Live Chat</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="btnLogin">Login</a>
+      <a href="report.html" class="btn btn-primary btn-sm" id="btnReport">Report Now</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════ HERO ════════════════════════════ -->
+  <section class="hero" id="hero" aria-labelledby="heroHeading">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge animate-fade-up">
+          <span class="live-dot" aria-hidden="true"></span>
+          Live Platform — Real-Time Updates
+        </div>
+
+        <h1 id="heroHeading" class="hero-title animate-fade-up delay-1">
+          Accident Response<br />
+          <span class="gradient-text">On The Spot.</span>
+        </h1>
+
+        <p class="hero-sub animate-fade-up delay-2">
+          Report accidents, file insurance claims, and resolve disputes instantly.
+          Powered by real-time technology and AI-driven insights.
+        </p>
+
+        <div class="hero-cta animate-fade-up delay-3">
+          <a href="report.html" class="btn btn-accent btn-lg" id="heroReportBtn">
+            <span>🚨</span> Report an Accident
+          </a>
+          <a href="dashboard.html" class="btn btn-ghost btn-lg" id="heroViewBtn">
+            <span>📊</span> Live Dashboard
+          </a>
+        </div>
+
+        <div class="hero-stats animate-fade-up delay-4" role="list" aria-label="Platform statistics">
+          <div class="hero-stat" role="listitem">
+            <span class="hero-stat-number" id="statReports">2,847</span>
+            <span class="hero-stat-label">Reports Filed</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat" role="listitem">
+            <span class="hero-stat-number" id="statClaims">1,203</span>
+            <span class="hero-stat-label">Claims Processed</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat" role="listitem">
+            <span class="hero-stat-number" id="statResolved">94%</span>
+            <span class="hero-stat-label">Resolution Rate</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat" role="listitem">
+            <span class="hero-stat-number" id="statOnline">—</span>
+            <span class="hero-stat-label">Online Now</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual animate-float" aria-hidden="true">
+        <div class="hero-phone-mockup">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-content">
+              <div class="phone-alert">
+                <span>🔴</span>
+                <span>Accident Reported Nearby</span>
+              </div>
+              <div class="phone-map">
+                <div class="phone-map-pin animate-pulse">📍</div>
+              </div>
+              <div class="phone-action">
+                <div class="phone-btn-primary">Report Now</div>
+                <div class="phone-btn-secondary">View Details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-label="Scroll down">
+      <div class="scroll-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ═════════════════════════ LIVE TICKER ════════════════════════ -->
+  <div class="live-ticker" aria-live="polite" aria-label="Live accident feed">
+    <div class="ticker-label">
+      <span class="live-dot"></span>LIVE
+    </div>
+    <div class="ticker-track" id="tickerTrack">
+      <div class="ticker-items" id="tickerItems">
+        <span class="ticker-item">🔴 Collision reported on MG Road, Bengaluru · 2 min ago</span>
+        <span class="ticker-item">🟡 Claim #CLM-K8F2 moved to under-review · 5 min ago</span>
+        <span class="ticker-item">🟢 Dispute #DSP-P9X1 resolved — settlement approved · 8 min ago</span>
+        <span class="ticker-item">🔴 Hit-and-run reported near Juhu Beach, Mumbai · 11 min ago</span>
+        <span class="ticker-item">🟡 Insurance claim filed for policy POL-2284 · 14 min ago</span>
+        <span class="ticker-item">🟢 OTS-A2B3 case closed — liability confirmed · 18 min ago</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ FEATURES SECTION ═════════════════════ -->
+  <section class="section features-section" id="features" aria-labelledby="featuresHeading">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-tag">
+          <span>⚡</span> Core Features
+        </div>
+        <h2 id="featuresHeading" class="section-heading">
+          Everything you need, <span class="gradient-text">right now.</span>
+        </h2>
+        <p class="section-sub" style="margin-inline: auto;">
+          From first response to final settlement — our platform covers every step of the accident and insurance lifecycle.
+        </p>
+      </div>
+
+      <div class="features-grid" role="list">
+        <article class="feature-card animate-fade-up" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(220,90%,56%,0.1); color: var(--clr-primary)">🚨</div>
+          <h3 class="feature-title">Instant Accident Reporting</h3>
+          <p class="feature-desc">File detailed accident reports with GPS location, photos, videos, and witness statements in under 3 minutes.</p>
+          <a href="report.html" class="feature-link" aria-label="Report an accident now">Report now →</a>
+        </article>
+
+        <article class="feature-card animate-fade-up delay-1" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(28,100%,55%,0.1); color: var(--clr-accent)">📋</div>
+          <h3 class="feature-title">Smart Insurance Claims</h3>
+          <p class="feature-desc">Submit and track insurance claims with real-time status updates and automated document verification.</p>
+          <a href="claim.html" class="feature-link" aria-label="File an insurance claim">File a claim →</a>
+        </article>
+
+        <article class="feature-card animate-fade-up delay-2" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(152,68%,42%,0.1); color: var(--clr-success)">⚖️</div>
+          <h3 class="feature-title">AI Dispute Resolution</h3>
+          <p class="feature-desc">Our AI-powered system analyzes disputes and suggests fair resolutions based on legal precedents and insurance policies.</p>
+          <a href="dispute.html" class="feature-link" aria-label="Open a dispute">Open a dispute →</a>
+        </article>
+
+        <article class="feature-card animate-fade-up delay-3" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(198,90%,48%,0.1); color: var(--clr-info)">📡</div>
+          <h3 class="feature-title">Real-Time Dashboard</h3>
+          <p class="feature-desc">Monitor live accident feeds, claim statuses, and dispute progress on an interactive, socket-powered dashboard.</p>
+          <a href="dashboard.html" class="feature-link" aria-label="View live dashboard">View dashboard →</a>
+        </article>
+
+        <article class="feature-card animate-fade-up delay-1" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(262,80%,60%,0.1); color: hsl(262,80%,70%)">💬</div>
+          <h3 class="feature-title">Live Chat Support</h3>
+          <p class="feature-desc">Instant WebSocket-powered chat with insurance agents and support staff, available 24/7.</p>
+          <a href="chat.html" class="feature-link" aria-label="Start live chat">Start chatting →</a>
+        </article>
+
+        <article class="feature-card animate-fade-up delay-2" role="listitem" tabindex="0">
+          <div class="feature-icon" style="background: hsla(4,86%,58%,0.1); color: var(--clr-danger)">🔐</div>
+          <h3 class="feature-title">Secure & Private</h3>
+          <p class="feature-desc">Bank-grade JWT authentication, role-based access control, and end-to-end encrypted communication.</p>
+          <a href="login.html" class="feature-link" aria-label="Create your account">Create account →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ HOW IT WORKS ════════════════════════ -->
+  <section class="section how-section" id="how-it-works" aria-labelledby="howHeading">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-tag"><span>📖</span> How It Works</div>
+        <h2 id="howHeading" class="section-heading">Three steps to <span class="gradient-text">resolution.</span></h2>
+      </div>
+
+      <div class="how-timeline" role="list">
+        <div class="how-step" role="listitem">
+          <div class="how-step-number" aria-hidden="true">01</div>
+          <div class="how-step-connector" aria-hidden="true"></div>
+          <div class="how-step-content">
+            <div class="how-step-icon">📸</div>
+            <h3 class="how-step-title">Report the Accident</h3>
+            <p class="how-step-desc">Use our mobile-friendly form to document the accident with location, photos, and details.</p>
+          </div>
+        </div>
+
+        <div class="how-step" role="listitem">
+          <div class="how-step-number" aria-hidden="true">02</div>
+          <div class="how-step-connector" aria-hidden="true"></div>
+          <div class="how-step-content">
+            <div class="how-step-icon">📤</div>
+            <h3 class="how-step-title">File Your Claim</h3>
+            <p class="how-step-desc">Submit your insurance claim with supporting documents. Track status in real time via our dashboard.</p>
+          </div>
+        </div>
+
+        <div class="how-step" role="listitem">
+          <div class="how-step-number" aria-hidden="true">03</div>
+          <div class="how-step-connector" aria-hidden="true" style="opacity:0"></div>
+          <div class="how-step-content">
+            <div class="how-step-icon">✅</div>
+            <h3 class="how-step-title">Get Resolved</h3>
+            <p class="how-step-desc">Our AI mediator and agents review your case and deliver fair resolutions quickly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ LIVE CHAT SECTION ════════════════════════ -->
+  <section class="section ai-section" id="live-chat" aria-labelledby="chatHeading">
+    <div class="container">
+      <div class="ai-card">
+        <div class="ai-content">
+          <div class="section-tag"><span>💬</span> Live Support</div>
+          <h2 id="chatHeading" class="section-heading">Instant <span class="gradient-text">Live Chat.</span></h2>
+          <p class="section-sub">
+            Get immediate answers to your questions. Chat with our live support agents and AI assistants
+            for real-time help with accident reports, insurance claims, and platform guidance.
+          </p>
+          <div class="ai-chat-demo">
+            <div class="ai-msg ai-msg-user">
+              "I just had a minor fender-bender. What information do I need to report the accident right now?"
+            </div>
+            <div class="ai-msg ai-msg-ai">
+              <span class="ai-avatar" aria-hidden="true">💬</span>
+              <div>
+                Hello! To file a complete report, please securely collect: <strong>(1)</strong> Photos of the vehicle damage and license plates, <strong>(2)</strong> GPS location of the incident, and <strong>(3)</strong> The other driver's contact and insurance details. You can start the report using the button at the top!
+              </div>
+            </div>
+          </div>
+          <a href="chat.html" class="btn btn-primary" id="aiChatBtn">Open Live Chat →</a>
+        </div>
+        <div class="ai-visual" aria-hidden="true">
+          <div class="ai-orb"></div>
+          <div class="ai-rings">
+            <div class="ai-ring"></div>
+            <div class="ai-ring"></div>
+            <div class="ai-ring"></div>
+          </div>
+          <div class="ai-icon">💬</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ CTA SECTION ════════════════════════ -->
+  <section class="section cta-section" aria-labelledby="ctaHeading">
+    <div class="container">
+      <div class="cta-card text-center">
+        <div class="section-tag" style="margin-inline: auto;"><span>🚀</span> Get Started Free</div>
+        <h2 id="ctaHeading" class="section-heading">Ready when you need it most.</h2>
+        <p class="section-sub" style="margin-inline: auto; margin-top: var(--space-4);">
+          Join thousands of users who trust On The Spot for accident reporting and insurance management.
+        </p>
+        <div class="cta-buttons">
+          <a href="login.html" class="btn btn-accent btn-lg" id="ctaSignupBtn">Create Free Account</a>
+          <a href="report.html" class="btn btn-ghost btn-lg" id="ctaReportBtn">Report Without Account</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOOTER ══════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-brand">
+            <div class="nav-logo-icon">🚨</div>
+            <span>On The Spot</span>
+          </a>
+          <p>Real-time accident information and insurance dispute resolution, available on every device, everywhere.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul role="list">
+            <li><a href="report.html">Report Accident</a></li>
+            <li><a href="claim.html">File a Claim</a></li>
+            <li><a href="dispute.html">Dispute Resolution</a></li>
+            <li><a href="dashboard.html">Live Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Support</h5>
+          <ul role="list">
+            <li><a href="chat.html">Live Chat</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul role="list">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Disclaimer</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="footerYear">2024</span> On The Spot. All rights reserved.</span>
+        <span>Built with Node.js · MongoDB · Socket.IO · OpenAI</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script>
+    // Index page: animate counters on the live stats
+    (function () {
+      function animateCounter(el, target, suffix) {
+        if (!el) return;
+        var current = 0;
+        var step = Math.ceil(target / 60);
+        var timer = setInterval(function () {
+          current = Math.min(current + step, target);
+          el.textContent = current.toLocaleString() + (suffix || '');
+          if (current >= target) clearInterval(timer);
+        }, 25);
+      }
+      window.addEventListener('load', function () {
+        animateCounter(document.getElementById('statReports'), 2847);
+        animateCounter(document.getElementById('statClaims'), 1203);
+        // Ticker duplication for seamless scroll
+        var items = document.getElementById('tickerItems');
+        if (items) items.innerHTML += items.innerHTML;
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Report an accident on On The Spot. Submit detailed reports with GPS location, photos, and witness information." />
+  <title>Report an Accident — On The Spot</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/report.css" />
+  <!-- Leaflet Map library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">🚨</div>
+      <span>On The Spot</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="report.html" class="nav-link active" aria-current="page">Report</a></li>
+      <li><a href="claim.html" class="nav-link">Claims</a></li>
+      <li><a href="dispute.html" class="nav-link">Disputes</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="chat.html" class="nav-link">Live Chat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="btnLogin">Login</a>
+      <a href="report.html" class="btn btn-primary btn-sm">Report Now</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <div class="section-tag"><span>🚨</span> Accident Report</div>
+      <h1 class="section-heading">Report an <span class="gradient-text">Accident</span></h1>
+      <p class="section-sub">Provide accurate details to help process your report quickly. All fields marked <span style="color:var(--clr-danger)">*</span> are required.</p>
+    </div>
+  </header>
+
+  <main class="report-main">
+    <div class="container">
+      <!-- Multi-step form -->
+      <div class="steps" id="formSteps" role="list" aria-label="Form steps">
+        <div class="step active" role="listitem" data-step="1">
+          <div class="step-bubble">1</div>
+          <span class="step-label">Accident Info</span>
+        </div>
+        <div class="step" role="listitem" data-step="2">
+          <div class="step-bubble">2</div>
+          <span class="step-label">Location</span>
+        </div>
+        <div class="step" role="listitem" data-step="3">
+          <div class="step-bubble">3</div>
+          <span class="step-label">Vehicles</span>
+        </div>
+        <div class="step" role="listitem" data-step="4">
+          <div class="step-bubble">4</div>
+          <span class="step-label">Evidence</span>
+        </div>
+        <div class="step" role="listitem" data-step="5">
+          <div class="step-bubble">5</div>
+          <span class="step-label">Submit</span>
+        </div>
+      </div>
+
+      <form id="accidentForm" class="report-form" novalidate aria-label="Accident report form" enctype="multipart/form-data">
+
+        <!-- ── Step 1: Accident Info ── -->
+        <div class="form-step active" id="step-1" aria-labelledby="step1Heading">
+          <div class="form-step-header">
+            <h2 id="step1Heading" class="form-step-title">Accident Details</h2>
+            <p class="form-step-sub">Tell us what happened.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="accidentType">Accident Type <span class="required">*</span></label>
+              <select class="form-control" id="accidentType" name="accidentType" required>
+                <option value="" disabled selected>Select accident type...</option>
+                <option value="collision">Vehicle Collision</option>
+                <option value="hit-and-run">Hit and Run</option>
+                <option value="rear-end">Rear-End</option>
+                <option value="side-impact">Side Impact</option>
+                <option value="rollover">Rollover</option>
+                <option value="pedestrian">Pedestrian Involved</option>
+                <option value="property-damage">Property Damage Only</option>
+                <option value="other">Other</option>
+              </select>
+              <p class="form-error" id="accidentTypeError"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="severity">Severity <span class="required">*</span></label>
+              <select class="form-control" id="severity" name="severity" required>
+                <option value="" disabled selected>Select severity...</option>
+                <option value="minor">Minor — No injuries</option>
+                <option value="moderate">Moderate — Minor injuries</option>
+                <option value="severe">Severe — Serious injuries</option>
+                <option value="fatal">Fatal — Loss of life</option>
+              </select>
+              <p class="form-error" id="severityError"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="dateTime">Date & Time of Accident <span class="required">*</span></label>
+              <input type="datetime-local" class="form-control" id="dateTime" name="dateTime" required />
+              <p class="form-error" id="dateTimeError"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="policeReportFiled">Police Report Filed?</label>
+              <select class="form-control" id="policeReportFiled" name="policeReportFiled">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:var(--space-5)">
+            <label class="form-label" for="description">
+              Description <span class="required">*</span>
+              <span class="form-hint" style="margin-left:auto" id="descCounter">0/2000</span>
+            </label>
+            <textarea class="form-control" id="description" name="description" rows="5"
+              placeholder="Describe what happened — include sequence of events, weather conditions, road conditions, and any other relevant details..."
+              required maxlength="2000"></textarea>
+            <p class="form-error" id="descriptionError"></p>
+          </div>
+
+          <!-- Injuries -->
+          <div class="injury-section">
+            <div class="form-group">
+              <label class="form-label">Were there any injuries?</label>
+              <div class="radio-group" role="group" aria-label="Injuries occurred">
+                <label class="radio-label">
+                  <input type="radio" name="injuriesOccurred" value="false" checked id="injuriesNo" />
+                  <span class="radio-custom"></span> No injuries
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="injuriesOccurred" value="true" id="injuriesYes" />
+                  <span class="radio-custom"></span> Yes, injuries occurred
+                </label>
+              </div>
+            </div>
+            <div class="injury-details hidden" id="injuryDetails">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="injuryCount">Number of injured persons</label>
+                  <input type="number" class="form-control" id="injuryCount" name="injuryCount" min="1" max="50" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="injuryDesc">Injury description</label>
+                  <input type="text" class="form-control" id="injuryDesc" name="injuryDesc"
+                    placeholder="e.g. fractures, head injuries..." />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <span></span>
+            <button type="button" class="btn btn-primary" id="step1Next">Next: Location →</button>
+          </div>
+        </div>
+
+        <!-- ── Step 2: Location ── -->
+        <div class="form-step hidden" id="step-2" aria-labelledby="step2Heading">
+          <div class="form-step-header">
+            <h2 id="step2Heading" class="form-step-title">Accident Location</h2>
+            <p class="form-step-sub">Where did the accident occur?</p>
+          </div>
+
+          <div class="location-detect">
+            <button type="button" class="btn btn-ghost" id="detectLocationBtn" aria-label="Detect my location">
+              📍 Detect My Location
+            </button>
+            <span class="form-hint" id="locationStatus">Use GPS for precise coordinates.</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group" style="grid-column: 1/-1">
+              <label class="form-label" for="address">Street Address / Description <span class="required">*</span></label>
+              <input type="text" class="form-control" id="address" name="address"
+                placeholder="e.g. Near Connaught Place, near traffic signal..." required />
+              <p class="form-error" id="addressError"></p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="city">City <span class="required">*</span></label>
+              <input type="text" class="form-control" id="city" name="city" placeholder="Mumbai" required />
+              <p class="form-error" id="cityError"></p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="state">State</label>
+              <input type="text" class="form-control" id="state" name="state" placeholder="Maharashtra" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="latitude">Latitude</label>
+              <input type="number" class="form-control" id="latitude" name="latitude" step="any" placeholder="Auto-filled via GPS" readonly />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="longitude">Longitude</label>
+              <input type="number" class="form-control" id="longitude" name="longitude" step="any" placeholder="Auto-filled via GPS" readonly />
+            </div>
+          </div>
+
+          <!-- Map preview using static embed -->
+          <div class="map-preview" id="mapPreview" aria-label="Location map preview">
+            <div class="map-placeholder">
+              <span>🗺️</span>
+              <p>Map will appear after location detection</p>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button type="button" class="btn btn-ghost" id="step2Prev">← Back</button>
+            <button type="button" class="btn btn-primary" id="step2Next">Next: Vehicles →</button>
+          </div>
+        </div>
+
+        <!-- ── Step 3: Vehicles ── -->
+        <div class="form-step hidden" id="step-3" aria-labelledby="step3Heading">
+          <div class="form-step-header">
+            <h2 id="step3Heading" class="form-step-title">Vehicle Information</h2>
+            <p class="form-step-sub">Add details for all vehicles involved.</p>
+          </div>
+
+          <div id="vehicleList">
+            <!-- Vehicles added dynamically -->
+          </div>
+
+          <button type="button" class="btn btn-ghost" id="addVehicleBtn" style="margin-top:var(--space-4)">
+            ＋ Add Vehicle
+          </button>
+
+          <div class="form-nav" style="margin-top:var(--space-8)">
+            <button type="button" class="btn btn-ghost" id="step3Prev">← Back</button>
+            <button type="button" class="btn btn-primary" id="step3Next">Next: Evidence →</button>
+          </div>
+        </div>
+
+        <!-- ── Step 4: Evidence ── -->
+        <div class="form-step hidden" id="step-4" aria-labelledby="step4Heading">
+          <div class="form-step-header">
+            <h2 id="step4Heading" class="form-step-title">Upload Evidence</h2>
+            <p class="form-step-sub">Photos, videos, and documents help strengthen your report.</p>
+          </div>
+
+          <div class="file-drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload evidence files">
+            <input type="file" id="evidence" name="evidence" multiple
+              accept="image/jpeg,image/png,image/webp,video/mp4,application/pdf"
+              aria-describedby="evidenceHint" />
+            <div class="drop-zone-icon">📎</div>
+            <p class="drop-zone-title">Drop files here or <span class="drop-zone-link">browse</span></p>
+            <p class="form-hint" id="evidenceHint">Accepted: JPG, PNG, WebP, MP4, PDF · Max 10MB each · Up to 10 files</p>
+          </div>
+
+          <div class="file-previews" id="filePreviews" role="list" aria-label="Selected files"></div>
+
+          <!-- Multimedia demonstration: audio element -->
+          <div class="media-section">
+            <h3 class="media-title">Record Audio Statement (Optional)</h3>
+            <audio controls id="audioStatement" aria-label="Audio statement recorder"
+              style="width:100%; margin-top:var(--space-3); filter: invert(1) hue-rotate(180deg);">
+              <source src="" type="audio/ogg" />
+              Your browser does not support the audio element.
+            </audio>
+            <p class="form-hint">For recorded witness statements, upload as an audio file above.</p>
+          </div>
+
+          <div class="form-nav">
+            <button type="button" class="btn btn-ghost" id="step4Prev">← Back</button>
+            <button type="button" class="btn btn-primary" id="step4Next">Next: Review →</button>
+          </div>
+        </div>
+
+        <!-- ── Step 5: Review & Submit ── -->
+        <div class="form-step hidden" id="step-5" aria-labelledby="step5Heading">
+          <div class="form-step-header">
+            <h2 id="step5Heading" class="form-step-title">Review & Submit</h2>
+            <p class="form-step-sub">Review your report before submission.</p>
+          </div>
+
+          <div class="review-card" id="reviewSummary">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div class="form-check" style="margin-top: var(--space-6)">
+            <label class="checkbox-label" for="agreeTerms">
+              <input type="checkbox" id="agreeTerms" name="agreeTerms" required />
+              <span class="checkbox-custom"></span>
+              I confirm that the information provided is accurate and true to the best of my knowledge.
+              <span class="required">*</span>
+            </label>
+          </div>
+
+          <div class="form-nav" style="margin-top:var(--space-8)">
+            <button type="button" class="btn btn-ghost" id="step5Prev">← Back</button>
+            <button type="submit" class="btn btn-accent btn-lg" id="submitBtn">
+              🚨 Submit Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div class="form-step hidden" id="step-success">
+          <div class="success-card text-center">
+            <div class="success-icon animate-float">✅</div>
+            <h2>Report Submitted!</h2>
+            <p>Your accident report has been filed successfully. Track your case below.</p>
+            <div class="case-number-display">
+              Case #: <strong id="caseNumberDisplay">—</strong>
+            </div>
+            <div style="display:flex; gap:var(--space-4); justify-content:center; margin-top:var(--space-8)">
+              <a href="claim.html" class="btn btn-primary">File a Claim →</a>
+              <a href="dashboard.html" class="btn btn-ghost">View Dashboard →</a>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© <span id="footerYear">2024</span> On The Spot. All rights reserved.</span>
+        <span>Need help? <a href="chat.html">Live Chat</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/report.js"></script>
+</body>
+</html>

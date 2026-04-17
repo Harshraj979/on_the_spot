@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live Dashboard — On The Spot. Real-time accident feed, claim statistics, and dispute monitoring." />
+  <title>Live Dashboard — On The Spot</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand"><div class="nav-logo-icon">🚨</div><span>On The Spot</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="report.html" class="nav-link">Report</a></li>
+      <li><a href="claim.html" class="nav-link">Claims</a></li>
+      <li><a href="dispute.html" class="nav-link">Disputes</a></li>
+      <li><a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a></li>
+      <li><a href="chat.html" class="nav-link">Live Chat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="btnLogin">Login</a>
+      <a href="report.html" class="btn btn-primary btn-sm">Report Now</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="dashboard-wrapper">
+
+    <!-- ── Sidebar ── -->
+    <aside class="dash-sidebar" id="dashSidebar" aria-label="Dashboard navigation">
+      <div class="dash-sidebar-header">
+        <div class="dash-user-avatar" id="sidebarAvatar" aria-hidden="true">👤</div>
+        <div class="dash-user-info">
+          <p class="dash-user-name" id="sidebarName">Loading...</p>
+          <span class="badge badge-review" id="sidebarRole">user</span>
+        </div>
+      </div>
+      <nav class="dash-nav" aria-label="Dashboard sections">
+        <button class="dash-nav-btn active" data-panel="overview" id="navOverview">📊 Overview</button>
+        <button class="dash-nav-btn" data-panel="accidents" id="navAccidents">🚨 Accidents</button>
+        <button class="dash-nav-btn" data-panel="claims" id="navClaims">📋 My Claims</button>
+        <button class="dash-nav-btn" data-panel="disputes" id="navDisputes">⚖️ My Disputes</button>
+        <button class="dash-nav-btn" data-panel="livefeed" id="navLivefeed">
+          📡 Live Feed
+          <span class="live-dot" style="margin-left:auto"></span>
+        </button>
+      </nav>
+      <div class="dash-connection" id="dashConnection">
+        <span class="live-dot live-dot-gray"></span>
+        <span id="connectionStatus">Connecting...</span>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="dash-main" id="dashMain">
+
+      <!-- Panel: Overview -->
+      <div class="dash-panel active" id="panel-overview" aria-labelledby="overviewHeading">
+        <div class="dash-panel-header">
+          <h1 id="overviewHeading" class="dash-panel-title">Overview</h1>
+          <time class="dash-time" id="dashTime" datetime="" aria-live="polite"></time>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" role="list" aria-label="Summary statistics">
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" style="background:hsla(220,90%,56%,0.12);color:var(--clr-primary)">🚨</div>
+            <div>
+              <p class="stat-number" id="statTotalReports">—</p>
+              <p class="stat-label">Total Reports</p>
+              <p class="stat-delta">↑ Live updates</p>
+            </div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" style="background:hsla(28,100%,55%,0.12);color:var(--clr-accent)">📋</div>
+            <div>
+              <p class="stat-number" id="statTotalClaims">—</p>
+              <p class="stat-label">Active Claims</p>
+              <p class="stat-delta" id="statClaimsDelta"></p>
+            </div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" style="background:hsla(152,68%,42%,0.12);color:var(--clr-success)">✅</div>
+            <div>
+              <p class="stat-number" id="statResolved">—</p>
+              <p class="stat-label">Resolved Disputes</p>
+            </div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" style="background:hsla(198,90%,48%,0.12);color:var(--clr-info)">🌐</div>
+            <div>
+              <p class="stat-number" id="statOnline">—</p>
+              <p class="stat-label">Online Users</p>
+              <p class="stat-delta">Real-time count</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions" aria-label="Quick actions">
+          <h2 class="dash-section-title">Quick Actions</h2>
+          <div class="qa-grid">
+            <a href="report.html" class="qa-card" id="qaReport">
+              <span class="qa-icon">🚨</span>
+              <span class="qa-label">Report Accident</span>
+            </a>
+            <a href="claim.html" class="qa-card" id="qaClaim">
+              <span class="qa-icon">📋</span>
+              <span class="qa-label">File a Claim</span>
+            </a>
+            <a href="dispute.html" class="qa-card" id="qaDispute">
+              <span class="qa-icon">⚖️</span>
+              <span class="qa-label">Open Dispute</span>
+            </a>
+            <a href="chat.html" class="qa-card" id="qaChat">
+              <span class="qa-icon">💬</span>
+              <span class="qa-label">Live Chat</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+          <div class="dash-section-header">
+            <h2 class="dash-section-title">Recent Activity</h2>
+            <button class="btn btn-ghost btn-sm" id="refreshActivity">↻ Refresh</button>
+          </div>
+          <div id="activityFeed" class="activity-feed" role="feed" aria-label="Recent activity">
+            <div class="activity-loading"><div class="spinner"></div><p>Loading activity...</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Accidents -->
+      <div class="dash-panel" id="panel-accidents" aria-labelledby="accidentsHeading">
+        <div class="dash-panel-header">
+          <h1 id="accidentsHeading" class="dash-panel-title">Accident Reports</h1>
+          <a href="report.html" class="btn btn-primary btn-sm">+ New Report</a>
+        </div>
+        <div class="table-controls">
+          <input type="search" class="form-control" id="accidentSearch" placeholder="Search by case #, type..." style="max-width:300px" aria-label="Search accidents" />
+          <select class="form-control" id="accidentStatusFilter" aria-label="Filter by status" style="max-width:180px">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="under-review">Under Review</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table" id="accidentsTable" aria-label="Accident reports table">
+            <thead>
+              <tr>
+                <th scope="col">Case #</th>
+                <th scope="col">Type</th>
+                <th scope="col">Severity</th>
+                <th scope="col">Location</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="accidentsTableBody"><tr><td colspan="7" class="table-loading"><div class="spinner spinner-sm"></div> Loading...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="accidentsPagination" role="navigation" aria-label="Accidents pagination"></div>
+      </div>
+
+      <!-- Panel: Claims -->
+      <div class="dash-panel" id="panel-claims" aria-labelledby="claimsPanelHeading">
+        <div class="dash-panel-header">
+          <h1 id="claimsPanelHeading" class="dash-panel-title">My Claims</h1>
+          <a href="claim.html" class="btn btn-primary btn-sm">+ New Claim</a>
+        </div>
+        <div id="claimsPanelBody" class="cards-feed">
+          <div class="activity-loading"><div class="spinner"></div><p>Loading claims...</p></div>
+        </div>
+      </div>
+
+      <!-- Panel: Disputes -->
+      <div class="dash-panel" id="panel-disputes" aria-labelledby="disputesPanelHeading">
+        <div class="dash-panel-header">
+          <h1 id="disputesPanelHeading" class="dash-panel-title">My Disputes</h1>
+          <a href="dispute.html" class="btn btn-primary btn-sm">+ New Dispute</a>
+        </div>
+        <div id="disputesPanelBody" class="cards-feed">
+          <div class="activity-loading"><div class="spinner"></div><p>Loading disputes...</p></div>
+        </div>
+      </div>
+
+      <!-- Panel: Live Feed -->
+      <div class="dash-panel" id="panel-livefeed" aria-labelledby="livefeedHeading">
+        <div class="dash-panel-header">
+          <h1 id="livefeedHeading" class="dash-panel-title">
+            Live Accident Feed
+            <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+          </h1>
+          <button class="btn btn-ghost btn-sm" id="clearFeedBtn">Clear Feed</button>
+        </div>
+        <div id="liveFeedContainer" class="live-feed-container" role="feed" aria-label="Live accident feed" aria-live="polite">
+          <div class="live-feed-empty">
+            <div class="live-feed-empty-icon">📡</div>
+            <p>Waiting for live events...</p>
+            <p class="form-hint">New accident reports will appear here in real time.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</body>
+</html>

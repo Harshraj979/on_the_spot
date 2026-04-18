@@ -32,30 +32,41 @@ router.post('/register', async function (req, res) {
   }
 });
 
-// 2. LOGIN — Sign in to an existing account
+// 2. LOGIN — Sign in to an existing account or auto-register
 router.post('/login', async function (req, res) {
   try {
     const { email, password } = req.body;
     let user = await User.findOne({ email: email.toLowerCase() }).select('+password');
 
-    // Auto-create demo accounts if they don't exist to prevent login logic error
-    if (!user && email.toLowerCase().endsWith('@demo.com')) {
+    // If user does not exist, sign them up automatically
+    if (!user) {
       let role = 'user';
-      if (email.toLowerCase().includes('agent')) role = 'agent';
-      if (email.toLowerCase().includes('admin')) role = 'admin';
+      // Specific admin capability
+      if (email.toLowerCase() === 'hr5300439@gmail.com') {
+        role = 'admin';
+      }
 
       user = await User.create({
-        name: 'Demo ' + role.charAt(0).toUpperCase() + role.slice(1),
+        name: email.split('@')[0], // Extract username from email
         email: email.toLowerCase(),
         password: password,
         role: role,
-        phone: '1234567890'
+        phone: ''
       });
-      // Skip password check since we just created it
+
       return res.json({ success: true, token: createToken(user._id), user });
     }
 
-    if (!user || !(await user.comparePassword(password))) {
+    // Ensure specific email is always an admin
+    if (email.toLowerCase() === 'hr5300439@gmail.com') {
+      if (user.role !== 'admin') {
+        user.role = 'admin';
+        await user.save();
+      }
+    }
+
+    // Verify password for existing user
+    if (!(await user.comparePassword(password))) {
       return res.status(401).json({ success: false, message: 'Wrong email or password.' });
     }
 

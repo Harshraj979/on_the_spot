@@ -237,7 +237,8 @@ document.addEventListener('DOMContentLoaded', function () {
       updateConnectionUI(false);
       return;
     }
-    socket = io(window.location.origin, {
+    const socketUrl = window.location.protocol === 'file:' ? 'http://localhost:5000' : window.location.origin;
+    socket = io(socketUrl, {
       auth: { token: Auth.getToken() || '' },
       transports: ['websocket', 'polling'],
     });

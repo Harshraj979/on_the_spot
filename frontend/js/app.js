@@ -3,7 +3,7 @@
 // Works in any browser when opened from http://localhost:5000
 
 // ─── API Base URL ─────────────────────────────────────────────────────────────
-const API = '/api';
+const API = window.location.protocol === 'file:' ? 'http://localhost:5000/api' : '/api';
 
 // ─── Simple API helper ────────────────────────────────────────────────────────
 const http = {

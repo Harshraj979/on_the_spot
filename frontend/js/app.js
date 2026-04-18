@@ -3,7 +3,7 @@
 // Works in any browser when opened from http://localhost:5000
 
 // ─── API Base URL ─────────────────────────────────────────────────────────────
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 // ─── Simple API helper ────────────────────────────────────────────────────────
 const http = {

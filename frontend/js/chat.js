@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Socket.IO ────────────────────────────────────────────────
   if (typeof io !== 'undefined') {
-    socket = io('http://localhost:5000', {
+    socket = io(window.location.origin, {
       auth: { token: Auth.getToken() || '' },
       transports: ['websocket', 'polling'],
     });

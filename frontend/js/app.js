@@ -133,13 +133,19 @@ const Toast = {
     link.classList.toggle('active', active);
   });
 
-  // Update login/dashboard button
+  // Update login button to logout if authenticated
   const loginBtn = document.getElementById('btnLogin');
   if (loginBtn) {
     const user = Auth.getUser();
     if (user) {
-      loginBtn.textContent = 'Dashboard';
-      loginBtn.href = '/dashboard.html';
+      loginBtn.textContent = 'Logout';
+      loginBtn.href = '#';
+      loginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        Auth.clear();
+        Toast.success('Logged out successfully.');
+        setTimeout(() => window.location.reload(), 1000);
+      });
     }
   }
 })();

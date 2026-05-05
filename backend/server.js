@@ -8,6 +8,7 @@ const express      = require('express');
 const mongoose     = require('mongoose');
 const cors         = require('cors');
 const path         = require('path');
+const fs           = require('fs');
 const { Server }   = require('socket.io');
 const http         = require('http');
 
@@ -15,6 +16,7 @@ const http         = require('http');
 const authRoutes = require('./auth_routes');
 const mainRoutes = require('./routes');
 const ai         = require('./ai');
+const { protect } = require('./auth');
 
 const app = express();
 
@@ -28,7 +30,18 @@ app.use(cors());              // Allows frontend to talk to backend
 app.use(express.json());      // Allows us to read JSON data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', 'frontend'))); // Serves your website
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serves uploaded photos
+
+// Protect uploaded files so only authenticated users can access them
+app.get('/uploads/:filename', protect, function (req, res) {
+  const fileName = path.basename(req.params.filename);
+  const filePath = path.join(__dirname, 'uploads', fileName);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ success: false, message: 'File not found.' });
+  }
+
+  res.sendFile(filePath);
+});
 
 // 3. API ROUTES
 app.use('/api/auth', authRoutes); // Handles Login/Register

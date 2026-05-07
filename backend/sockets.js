@@ -1,18 +1,17 @@
-// sockets.js — Handles real-time chat and AI bot integration
-// This file makes the Live Chat work!
+
 
 const { chatWithAI } = require('./ai');
 
-module.exports = function(io) {
-  
+module.exports = function (io) {
+
   // Track online users for a "Live Count"
   const onlineUsers = new Map();
 
-  io.on('connection', function(socket) {
+  io.on('connection', function (socket) {
     let userName = 'Guest';
 
     // 1. JOIN ROOM
-    socket.on('chat:join', function(data) {
+    socket.on('chat:join', function (data) {
       socket.join(data.roomId);
       onlineUsers.set(socket.id, data.name || 'Guest');
       userName = data.name || 'Guest';
@@ -22,11 +21,11 @@ module.exports = function(io) {
     });
 
     // 2. SEND MESSAGE
-    socket.on('chat:message', async function(data) {
+    socket.on('chat:message', async function (data) {
       const message = {
-        roomId:    data.roomId,
-        content:   data.content,
-        sender:    { name: userName },
+        roomId: data.roomId,
+        content: data.content,
+        sender: { name: userName },
         timestamp: new Date(),
       };
 
@@ -39,15 +38,15 @@ module.exports = function(io) {
         try {
           // Add a small delay so it feels like the AI is "thinking"
           setTimeout(async () => {
-             const aiReplyContent = await chatWithAI(data.content, `You are in the ${data.roomId} support room.`);
-             const aiMessage = {
-               roomId:    data.roomId,
-               content:   aiReplyContent,
-               sender:    { name: 'OnTheSpot AI' },
-               timestamp: new Date(),
-               isAI:      true
-             };
-             io.to(data.roomId).emit('chat:message', aiMessage);
+            const aiReplyContent = await chatWithAI(data.content, `You are in the ${data.roomId} support room.`);
+            const aiMessage = {
+              roomId: data.roomId,
+              content: aiReplyContent,
+              sender: { name: 'OnTheSpot AI' },
+              timestamp: new Date(),
+              isAI: true
+            };
+            io.to(data.roomId).emit('chat:message', aiMessage);
           }, 1000);
         } catch (err) {
           console.log('AI Socket Error:', err.message);
@@ -56,17 +55,17 @@ module.exports = function(io) {
     });
 
     // 3. TYPING INDICATOR
-    socket.on('chat:typing', function(data) {
+    socket.on('chat:typing', function (data) {
       socket.to(data.roomId).emit('chat:typing', { name: userName, isTyping: data.isTyping });
     });
 
     // 4. DASHBOARD PING (for live online count)
-    socket.on('dashboard:ping', function() {
+    socket.on('dashboard:ping', function () {
       socket.emit('dashboard:pong', { onlineCount: io.engine.clientsCount });
     });
 
     // 5. DISCONNECT
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
       onlineUsers.delete(socket.id);
       io.emit('chat:user-left', { name: userName });
     });

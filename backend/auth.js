@@ -1,8 +1,7 @@
-// auth.js — Handles checking if a user is logged in
 // This is used to "protect" certain pages so only logged-in users can see them.
 
-const jwt  = require('jsonwebtoken');
-const { User } = require('./models'); // Import User from our new flat models.js
+const jwt = require('jsonwebtoken');
+const { User } = require('./models');
 
 // This function checks for a "Token" in the request headers
 // If the token is valid, it lets the user through.
@@ -19,7 +18,7 @@ async function protect(req, res, next) {
       return res.status(401).json({ success: false, message: 'Please log in first.' });
     }
 
-    // Verify the token (makes sure it hasn't been tampered with)
+    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Find the user who owns this token
@@ -28,9 +27,8 @@ async function protect(req, res, next) {
       return res.status(401).json({ success: false, message: 'User not found.' });
     }
 
-    // Attach the user to the request object so routes can use it (e.g., req.user.name)
     req.user = user;
-    next(); // Move to the next step
+    next();
 
   } catch (error) {
     res.status(401).json({ success: false, message: 'Invalid or expired login session.' });

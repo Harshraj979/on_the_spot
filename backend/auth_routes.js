@@ -1,11 +1,9 @@
-// auth_routes.js — Handle Login and Registration
-// This file handles all the user-related endpoints.
 
 const express = require('express');
 const router  = express.Router();
 const jwt     = require('jsonwebtoken');
-const { User } = require('./models'); // Import from our new models.js
-const { protect } = require('./auth'); // Import from our new auth.js
+const { User } = require('./models'); 
+const { protect } = require('./auth'); 
 
 // Secret helper to create a login token
 function createToken(userId) {
@@ -58,7 +56,6 @@ router.post('/login', async function (req, res) {
   }
 });
 
-// 3. ME — Get current user profile
 router.get('/me', protect, function (req, res) {
   res.json({ success: true, user: req.user });
 });

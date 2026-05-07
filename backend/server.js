@@ -1,21 +1,20 @@
-// server.js — This is the heart of your backend!
-// To start the server, run: npm run dev
 
 require('dotenv').config(); // Load secrets from .env file
 require('dns').setDefaultResultOrder('ipv4first'); // Fix fetch timeout for Google APIs
 
-const express      = require('express');
-const mongoose     = require('mongoose');
-const cors         = require('cors');
-const path         = require('path');
-const fs           = require('fs');
-const { Server }   = require('socket.io');
-const http         = require('http');
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const path = require('path');
+const fs = require('fs');
+const { Server } = require('socket.io');
+const http = require('http');
 
 // Import our simplified logic from the root folder
 const authRoutes = require('./auth_routes');
 const mainRoutes = require('./routes');
-const ai         = require('./ai');
+const ai = require('./ai');
 const { protect } = require('./auth');
 
 const app = express();
@@ -26,6 +25,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log('❌ MongoDB Error:', err.message));
 
 // 2. MIDDLEWARE (The helpers)
+app.use(helmet());            // Sets secure HTTP headers to protect against common attacks
 app.use(cors());              // Allows frontend to talk to backend
 app.use(express.json());      // Allows us to read JSON data
 app.use(express.urlencoded({ extended: true }));
@@ -45,8 +45,8 @@ app.get('/uploads/:filename', protect, function (req, res) {
 
 // 3. API ROUTES
 app.use('/api/auth', authRoutes); // Handles Login/Register
-app.use('/api',      mainRoutes); // Handles Accidents, Claims, Disputes
-app.use('/api/ai',   ai.router);  // Handles AI Chat
+app.use('/api', mainRoutes); // Handles Accidents, Claims, Disputes
+app.use('/api/ai', ai.router);  // Handles AI Chat
 
 // Basic "all good" check
 app.get('/api/health', (req, res) => res.json({ status: 'running' }));

@@ -1,17 +1,14 @@
-
 require('dotenv').config(); // Load secrets from .env file
 require('dns').setDefaultResultOrder('ipv4first'); // Fix fetch timeout for Google APIs
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
 const { Server } = require('socket.io');
 const http = require('http');
 
-// Import our simplified logic from the root folder
 const authRoutes = require('./auth_routes');
 const mainRoutes = require('./routes');
 const ai = require('./ai');
@@ -19,19 +16,15 @@ const { protect } = require('./auth');
 
 const app = express();
 
-// 1. DATABASE CONNECTION
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB!'))
   .catch((err) => console.log('❌ MongoDB Error:', err.message));
 
-// 2. MIDDLEWARE (The helpers)
-app.use(helmet());            // Sets secure HTTP headers to protect against common attacks
 app.use(cors());              // Allows frontend to talk to backend
 app.use(express.json());      // Allows us to read JSON data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', 'frontend'))); // Serves your website
 
-// Protect uploaded files so only authenticated users can access them
 app.get('/uploads/:filename', protect, function (req, res) {
   const fileName = path.basename(req.params.filename);
   const filePath = path.join(__dirname, 'uploads', fileName);
@@ -43,10 +36,9 @@ app.get('/uploads/:filename', protect, function (req, res) {
   res.sendFile(filePath);
 });
 
-// 3. API ROUTES
 app.use('/api/auth', authRoutes); // Handles Login/Register
 app.use('/api', mainRoutes); // Handles Accidents, Claims, Disputes
-app.use('/api/ai', ai.router);  // Handles AI Chat
+app.use('/api/ai', ai.router);
 
 // Basic "all good" check
 app.get('/api/health', (req, res) => res.json({ status: 'running' }));

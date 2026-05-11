@@ -19,8 +19,7 @@ function getAI() {
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(key);
-    // Use gemini-flash-latest which is common for free tier usage
+    const genAI = new GoogleGenerativeAI(key);  
     model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     return model;
   } catch (err) {

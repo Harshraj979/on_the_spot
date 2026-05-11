@@ -1,4 +1,3 @@
-// This is used to "protect" certain pages so only logged-in users can see them.
 
 const jwt = require('jsonwebtoken');
 const { User } = require('./models');

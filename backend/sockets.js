@@ -1,5 +1,4 @@
 
-
 const { chatWithAI } = require('./ai');
 
 module.exports = function (io) {
@@ -29,14 +28,10 @@ module.exports = function (io) {
         timestamp: new Date(),
       };
 
-      // Broadcast to everyone in the room
       io.to(data.roomId).emit('chat:message', message);
 
-      // --- AI INTEGRATION ---
-      // AI will reply in ALL chat rooms!
       if (!data.isAI) {
         try {
-          // Add a small delay so it feels like the AI is "thinking"
           setTimeout(async () => {
             const aiReplyContent = await chatWithAI(data.content, `You are in the ${data.roomId} support room.`);
             const aiMessage = {
